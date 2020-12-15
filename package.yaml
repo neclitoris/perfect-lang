@@ -36,7 +36,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-        - perfect-lang
+    - perfect-lang
 
 tests:
   lang-test:
