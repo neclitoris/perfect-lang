@@ -21,9 +21,22 @@ dependencies:
 - base >= 4.7 && < 5
 - recursion-schemes
 - deriving-compat
+- parsec
+- template-haskell
 
 library:
   source-dirs: src
+
+executables:
+  untyped-lambda:
+    main:                UntypedLambda.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+        - perfect-lang
 
 tests:
   lang-test:
@@ -34,4 +47,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - lang
+    - perfect-lang
