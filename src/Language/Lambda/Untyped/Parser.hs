@@ -1,4 +1,7 @@
-module Language.Lambda.Untyped.Parser where
+module Language.Lambda.Untyped.Parser
+  ( parseExpr
+  , expr
+  ) where
 
 import Data.Functor
 import Language.Lambda.Untyped.AST
@@ -29,4 +32,4 @@ subexpr = var <|> lam expr <|> char '(' *> expr <* char ')'
 expr :: Parser AST
 expr = chainl1 subexpr app
 
-parse = Text.Parsec.parse (expr <* eof) ""
+parseExpr = parse (expr <* eof) ""

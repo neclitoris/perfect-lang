@@ -1,4 +1,8 @@
-module Language.Lambda.Untyped.Eval where
+module Language.Lambda.Untyped.Eval
+  ( Alpha
+  , applyAlpha
+  , reduce'
+  , reduce ) where
 
 import Data.Functor.Foldable
 import Data.List
@@ -7,7 +11,8 @@ import Language.Lambda.Untyped.AST
 data Alpha = Alpha String MarkedAST
 
 genName :: [String] -> String -> String
-genName used cur = head $ filter (`notElem` used) $ cur : [cur ++ show i | i <- [0 ..]]
+genName used cur =
+  head $ filter (`notElem` used) $ cur : [cur ++ show i | i <- [0 ..]]
 
 applyAlpha :: Alpha -> MarkedAST -> MarkedAST
 applyAlpha (Alpha var t') = hylo app collect
@@ -29,10 +34,9 @@ applyAlpha (Alpha var t') = hylo app collect
     freeVars = let Marked _ f _ = t' in f
 
 reduce' :: MarkedAST -> MarkedAST
-reduce' = ana red
-  where
-    red (AppM _ _ (LamM _ _ v y) x) = project $ applyAlpha (Alpha v x) y
-    red any = project any
+reduce' = ana $ \case
+  (AppM _ _ (LamM _ _ v y) x) -> project $ applyAlpha (Alpha v x) y
+  any -> project any
 
 reduce = unmark . reduce' . mark
 
