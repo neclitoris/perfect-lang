@@ -25,6 +25,8 @@ dependencies:
 - parser-combinators
 - template-haskell
 - data-fix
+- prettyprinter
+- text
 
 library:
   source-dirs: src

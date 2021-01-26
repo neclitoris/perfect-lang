@@ -1,14 +1,29 @@
 module Language.Lambda.Untyped.Print
   ( pretty
+  , showAST
   ) where
 
 import Data.Functor.Foldable
-import Text.Printf
+import Prettyprinter
+import Prettyprinter.Render.Text
+import Data.Text.Lazy qualified as T
 
 import Language.Lambda.Untyped.AST
 
-pretty :: AST -> String
-pretty = cata $ \case
-  VarF v -> v
-  AppF x y -> mconcat ["(", x, y, ")"]
-  LamF v x -> mconcat ["(\\", v, ".", x, ")"]
+instance Pretty AST where
+  pretty = para \case
+    VarF v ->
+      pretty v
+    AppF (Lam{}, x) (App{}, y) ->
+      parens x <+> parens y
+    AppF (Lam{}, x) (_, y) ->
+      parens x <+> y
+    AppF (_, x) (App{}, y) ->
+      x <+> parens y
+    AppF (_, x) (_, y) ->
+      x <+> y
+    LamF v (_, x) ->
+      mconcat [backslash, pretty v, dot] <+> x
+
+showAST :: AST -> T.Text
+showAST = renderLazy . layoutSmart defaultLayoutOptions . pretty
