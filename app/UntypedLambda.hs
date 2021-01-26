@@ -7,6 +7,6 @@ import Language.Lambda.Untyped.Print
 
 main = do
   str <- getLine
-  case pretty . reduce <$> parseExpr str of
-    Right str -> putStrLn str
+  case parseExpr str of
+    Right expr -> putStrLn $ pretty $ reduce expr
     Left err -> error $ show err

@@ -4,8 +4,9 @@ module Language.Lambda.Untyped.Parser
   ) where
 
 import Data.Functor
-import Language.Lambda.Untyped.AST
 import Text.Parsec
+
+import Language.Lambda.Untyped.AST
 
 type Parser = Parsec String ()
 

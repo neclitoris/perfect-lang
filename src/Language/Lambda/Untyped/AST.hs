@@ -81,9 +81,9 @@ mark = cata markStep
 markStep :: ASTF MarkedAST -> MarkedAST
 markStep (VarF x) = Marked [] [x] (VarF x)
 markStep (AppF x@(Marked b1 f1 _) y@(Marked b2 f2 _)) =
-  Marked (b1 `union` b2) (f1 `union` f2) (AppF x y)
+  Marked (union b1 b2) (union f1 f2) (AppF x y)
 markStep (LamF v x@(Marked b f _)) =
-  Marked (b `union` [v]) (v `delete` f) (LamF v x)
+  Marked (union b [v]) (delete v f) (LamF v x)
 
 unmark :: MarkedAST -> AST
 unmark = cata (Fix . term . getCompose)
