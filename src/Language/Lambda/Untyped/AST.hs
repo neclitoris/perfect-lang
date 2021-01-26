@@ -1,11 +1,26 @@
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Language.Lambda.Untyped.AST where
+module Language.Lambda.Untyped.AST
+  ( ASTF(..)
+  , MarkedF
+  , AST
+  , Marked
+  , MarkedAST
+  , pattern Var
+  , pattern App
+  , pattern Lam
+  , pattern MarkedF
+  , pattern Marked
+  , pattern VarM
+  , pattern AppM
+  , pattern LamM
+  , mark
+  , markStep
+  , unmark
+  ) where
 
 import Data.Deriving
+import Data.Fix (Fix(..))
 import Data.Functor.Compose
 import Data.Functor.Foldable
 import Data.List
@@ -66,8 +81,9 @@ mark = cata markStep
 markStep :: ASTF MarkedAST -> MarkedAST
 markStep (VarF x) = Marked [] [x] (VarF x)
 markStep (AppF x@(Marked b1 f1 _) y@(Marked b2 f2 _)) =
-  Marked (b1 `union` b2) (f1 `union` f2) (AppF x y)
-markStep (LamF v x@(Marked b f _)) = Marked (b `union` [v]) (v `delete` f) (LamF v x)
+  Marked (union b1 b2) (union f1 f2) (AppF x y)
+markStep (LamF v x@(Marked b f _)) =
+  Marked (union b [v]) (delete v f) (LamF v x)
 
 unmark :: MarkedAST -> AST
 unmark = cata (Fix . term . getCompose)
