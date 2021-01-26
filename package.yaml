@@ -23,6 +23,7 @@ dependencies:
 - deriving-compat
 - parsec
 - template-haskell
+- data-fix
 
 library:
   source-dirs: src
@@ -65,7 +66,7 @@ default-extensions:
 - FlexibleInstances
 - FunctionalDependencies
 - GeneralizedNewtypeDeriving
-# - ImportQualifiedPost
+- ImportQualifiedPost
 - InstanceSigs
 - LambdaCase
 - LiberalTypeSynonyms
@@ -79,7 +80,7 @@ default-extensions:
 - RecordWildCards
 - ScopedTypeVariables
 - StandaloneDeriving
-# - StandaloneKindSignatures
+- StandaloneKindSignatures
 - StrictData
 - TupleSections
 - TypeApplications

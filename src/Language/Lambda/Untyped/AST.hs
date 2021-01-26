@@ -20,6 +20,7 @@ module Language.Lambda.Untyped.AST
   ) where
 
 import Data.Deriving
+import Data.Fix (Fix(..))
 import Data.Functor.Compose
 import Data.Functor.Foldable
 import Data.List
