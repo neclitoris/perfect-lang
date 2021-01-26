@@ -9,4 +9,4 @@ main = do
   str <- getLine
   case parseExpr str of
     Right expr -> putStrLn $ pretty $ reduce expr
-    Left err -> error $ show err
+    Left err -> error $ errorBundlePretty err

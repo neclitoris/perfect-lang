@@ -21,7 +21,8 @@ dependencies:
 - base >= 4.7 && < 5
 - recursion-schemes
 - deriving-compat
-- parsec
+- megaparsec
+- parser-combinators
 - template-haskell
 - data-fix
 

@@ -1,36 +1,40 @@
 module Language.Lambda.Untyped.Parser
   ( parseExpr
   , expr
+  , errorBundlePretty
   ) where
 
 import Data.Functor
-import Text.Parsec
+import Data.Void
+import Control.Monad.Combinators.Expr
+import Text.Megaparsec
+import Text.Megaparsec.Char
 
 import Language.Lambda.Untyped.AST
 
-type Parser = Parsec String ()
+type Parser = Parsec Void String
 
 var :: Parser AST
-var = Var <$> (spaces *> many1 (alphaNum <|> char '\''))
+var = Var <$> (space *> some (alphaNumChar <|> char '\''))
 
 app :: Parser (AST -> AST -> AST)
-app = optional space $> App
+app = App <$ optional spaceChar
 
 lam :: Parser AST -> Parser AST
 lam expr = do
-  spaces
+  space
   char '\\'
-  spaces
-  v <- many1 alphaNum
-  spaces
+  space
+  v <- some alphaNumChar
+  space
   char '.'
-  spaces
+  space
   Lam v <$> expr
 
 subexpr :: Parser AST
 subexpr = var <|> lam expr <|> char '(' *> expr <* char ')'
 
 expr :: Parser AST
-expr = chainl1 subexpr app
+expr = makeExprParser subexpr [[InfixL app]]
 
 parseExpr = parse (expr <* eof) ""
